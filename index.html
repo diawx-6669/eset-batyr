@@ -1,0 +1,905 @@
+<title>Есет батыр жолы</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Есет батыр бастаған ұлт-азаттық көтеріліс (1847–1858): оқу ойыны. 9 «В» сынып жобасы.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Sans+Narrow:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: one fixed night-steppe canvas; a single felt "сырмақ" panel per scene sits on it like a rug laid on the ground; hero is an asymmetric split (title left, embroidered medallion right). */
+:root{
+  color-scheme: dark;
+  --night:#0b1330;
+  --night-2:#121c42;
+  --felt:#18224e;
+  --felt-2:#1f2a5c;
+  --saffron:#e8b23f;
+  --saffron-dim:#b98c32;
+  --madder:#b23a2f;
+  --madder-deep:#7c2520;
+  --sand:#dcc8a0;
+  --sand-hi:#f2e7cd;
+  --sand-dim:#ab9c80;
+  --line:rgba(220,200,160,.18);
+  --font-display:"PT Sans Narrow","Arial Narrow","Roboto Condensed",sans-serif;
+  --font-body:"PT Serif",Georgia,"Times New Roman",serif;
+  --step--1:clamp(.84rem,.8rem + .2vw,.95rem);
+  --step-0:clamp(1.02rem,.96rem + .3vw,1.15rem);
+  --step-1:clamp(1.25rem,1.1rem + .6vw,1.5rem);
+  --step-2:clamp(1.7rem,1.4rem + 1.4vw,2.4rem);
+  --step-3:clamp(2.4rem,1.8rem + 3vw,4rem);
+  --radius:6px;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --felt-tex:none;
+}
+html,body{min-height:100%}
+body{background:var(--night);color:var(--sand);font-family:var(--font-body);font-size:var(--step-0);line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--night)}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+.app{position:relative;z-index:1;min-height:100vh;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px;display:flex;flex-direction:column}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+
+h1,h2,h3{font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.01em;line-height:1;text-wrap:balance;margin:0;color:var(--sand-hi)}
+h2{font-size:var(--step-3);line-height:.95}
+h2:focus{outline:none}
+h3{font-size:var(--step-1);letter-spacing:.03em}
+p{margin:0;max-width:64ch}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--saffron);outline-offset:3px;border-radius:3px}
+
+/* ---------- HUD ---------- */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px))) calc(-1 * max(16px,env(safe-area-inset-right,0px)));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;background:linear-gradient(var(--night) 0%,rgba(11,19,48,.88) 70%,rgba(11,19,48,0));display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;justify-content:space-between}
+.hud[hidden]{display:none!important}
+.trail{display:flex;gap:4px;list-style:none;margin:0;padding:0;align-items:center;min-width:0}
+.trail li{display:flex;align-items:center;gap:4px;font-family:var(--font-display);font-size:.88rem;color:var(--sand-dim);white-space:nowrap}
+.trail li+li::before{content:"";width:14px;height:0;border-top:1.5px dashed var(--line);margin-right:2px}
+.trail .knot{width:9px;height:9px;transform:rotate(45deg);border:1.5px solid var(--sand-dim);flex:none}
+.trail li.done .knot{background:var(--madder);border-color:var(--madder)}
+.trail li.now{color:var(--sand-hi)}
+.trail li.now .knot{background:var(--saffron);border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,178,63,.18)}
+.trail .yr{font-variant-numeric:tabular-nums}
+.meters{display:flex;gap:18px;flex-wrap:wrap}
+.meter{display:grid;gap:3px;position:relative}
+.meter-l{font-family:var(--font-display);font-size:.82rem;letter-spacing:.04em;color:var(--sand-dim);display:flex;justify-content:space-between;gap:8px}
+.meter-l b{color:var(--sand-hi);font-weight:700;font-variant-numeric:tabular-nums}
+.beads{display:flex;gap:3px}
+.beads i{width:8px;height:8px;transform:rotate(45deg);border:1px solid rgba(220,200,160,.35);transition:background-color .3s ease,border-color .3s ease}
+.beads i.on{background:var(--saffron);border-color:var(--saffron)}
+.meter.peace .beads i.on{background:var(--sand);border-color:var(--sand)}
+.meter.force .beads i.on{background:var(--madder);border-color:#d05244}
+.floater{position:absolute;right:0;top:-4px;font-family:var(--font-display);font-weight:700;font-size:1rem;pointer-events:none;animation:float 1.3s var(--ease-out) forwards}
+.floater.up{color:var(--saffron)}
+.floater.down{color:#e0705f}
+@keyframes float{from{opacity:0;transform:translateY(6px)}20%{opacity:1}to{opacity:0;transform:translateY(-18px)}}
+
+/* ---------- stage & felt panel ---------- */
+#stage{width:100%;max-width:1040px;margin-inline:auto;flex:1;display:flex;flex-direction:column;justify-content:center;padding-block:20px}
+.scene{animation:enter .5s var(--ease-out) both}
+.scene.leaving{animation:leave .18s ease-out both}
+@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes leave{to{opacity:0;transform:translateY(-8px)}}
+.felt{position:relative;background-image:var(--felt-tex),linear-gradient(160deg,var(--felt-2),var(--felt) 60%,#151d45);border-radius:var(--radius);box-shadow:0 30px 60px -30px rgba(3,6,20,.9),inset 0 0 0 1px rgba(220,200,160,.08)}
+.felt::after{content:"";position:absolute;inset:7px;border:1.5px dashed rgba(232,178,63,.28);border-radius:3px;pointer-events:none}
+.band{height:30px;display:block;width:100%}
+.band svg{display:block;width:100%;height:30px}
+.panel-body{padding:clamp(20px,4vw,48px);display:grid;gap:22px}
+.kicker{font-family:var(--font-display);font-size:1rem;letter-spacing:.06em;color:var(--saffron);display:flex;gap:10px;align-items:baseline}
+.kicker .yr{font-variant-numeric:tabular-nums}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:clamp(20px,4vw,44px);align-items:start}
+.cols>*{min-width:0}
+.main{display:grid;gap:16px}
+.lead{font-size:var(--step-1);line-height:1.45;color:var(--sand-hi)}
+.gloss{border-left:2px solid var(--madder);padding:4px 0 4px 18px;display:grid;gap:8px}
+.gloss dt{font-family:var(--font-display);font-weight:700;font-size:1.1rem;color:var(--sand-hi);text-transform:uppercase;letter-spacing:.03em}
+.gloss dd{margin:0;font-size:var(--step--1);line-height:1.55;color:var(--sand-dim)}
+.gloss .gl-h{font-family:var(--font-display);font-size:.9rem;color:var(--saffron)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:12px;border:0;border-radius:var(--radius);padding:14px 26px;font-family:var(--font-display);font-weight:700;font-size:1.15rem;letter-spacing:.06em;text-transform:uppercase;background:var(--saffron);color:#1a1530;box-shadow:inset 0 0 0 2px rgba(124,37,32,.35),inset 0 0 0 5px var(--saffron),inset 0 0 0 6px rgba(124,37,32,.5);transition:transform .12s ease,background-color .15s ease;white-space:nowrap;justify-self:start}
+.btn:hover{background:#f1c159}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--sand-hi);box-shadow:inset 0 0 0 1.5px var(--sand-dim)}
+.btn.ghost:hover{background:rgba(220,200,160,.08)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* ---------- options ---------- */
+.q{font-size:var(--step-2);margin-top:6px}
+.opts{display:grid;gap:10px}
+.opt{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:center;text-align:left;padding:12px 16px 12px 12px;border-radius:var(--radius);border:1.5px solid rgba(220,200,160,.22);background:rgba(11,19,48,.35);font-family:var(--font-body);font-size:var(--step-0);line-height:1.4;color:var(--sand-hi);transition:border-color .15s ease,background-color .15s ease,transform .12s ease}
+.opt:hover:not(:disabled){border-color:var(--saffron);background:rgba(232,178,63,.07)}
+.opt:active:not(:disabled){transform:scale(.99)}
+.opt-k{width:40px;height:40px;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:1.3rem;color:var(--saffron);border:1.5px dashed var(--saffron-dim);border-radius:50%}
+.opt:disabled{cursor:default;opacity:.5}
+.opt.picked{opacity:1;border-color:var(--saffron);background:rgba(232,178,63,.1)}
+.opt.picked .opt-k{background:var(--saffron);color:#1a1530;border-style:solid}
+.opt.right{opacity:1;border-color:#9cbf6a}
+.opt.wrong{opacity:1;border-color:#e0705f}
+
+/* ---------- outcome / history ---------- */
+.outcome{display:grid;gap:14px;animation:enter .45s var(--ease-out) both}
+.yours{font-style:italic;color:var(--sand)}
+.yours b{font-style:normal;font-family:var(--font-display);letter-spacing:.04em;color:var(--saffron);margin-right:6px}
+.history{position:relative;padding:22px 22px 22px 24px;border-radius:var(--radius);background:rgba(8,13,34,.55);border:1px solid rgba(178,58,47,.5);display:grid;gap:10px}
+.history h4{margin:0;font-family:var(--font-display);font-size:1.05rem;letter-spacing:.06em;color:#e58b7c;text-transform:uppercase}
+.history p{color:var(--sand-hi)}
+.stamp{justify-self:start;font-family:var(--font-display);font-weight:700;font-size:1.25rem;letter-spacing:.14em;padding:4px 14px;border:2px solid currentColor;border-radius:3px;transform:rotate(-3deg);color:#e0705f;animation:stamp .4s var(--ease-out) both .15s}
+.stamp.adapt{color:var(--saffron)}
+@keyframes stamp{from{opacity:0;transform:rotate(-3deg) scale(1.3)}to{opacity:1;transform:rotate(-3deg) scale(1)}}
+.event{font-size:var(--step--1);color:var(--sand-dim)}
+.event b{color:#e0705f;font-weight:400}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,5vw,72px);align-items:center;padding-block:clamp(24px,6vh,72px)}
+.hero-copy{display:grid;gap:22px}
+.hero-pre{font-family:var(--font-display);font-size:1.05rem;letter-spacing:.05em;color:var(--sand-dim)}
+.hero h1{font-size:clamp(4.2rem,13vw,10.5rem);line-height:.82;letter-spacing:-.005em;color:var(--sand-hi);text-shadow:0 2px 0 rgba(124,37,32,.6)}
+.hero h1 span{display:block}
+.hero-sub{font-family:var(--font-display);font-weight:700;text-transform:uppercase;font-size:clamp(1.15rem,2.2vw,1.6rem);letter-spacing:.05em;line-height:1.15;color:var(--sand)}
+.hero-sub .yr{display:block;font-size:clamp(1.8rem,4vw,2.9rem);color:var(--saffron);letter-spacing:.02em;font-variant-numeric:tabular-nums;margin-top:4px}
+.hero-lead{font-size:var(--step-1);line-height:1.45;color:var(--sand-hi);max-width:34ch}
+.authors{font-size:var(--step--1);color:var(--sand-dim)}
+.authors b{color:var(--sand);font-weight:700}
+.medal{position:relative;aspect-ratio:1;max-width:100%;width:min(100%,440px);justify-self:center}
+.medal .felt{position:absolute;inset:0;border-radius:var(--radius)}
+.medal svg{position:absolute;inset:0;width:100%;height:100%}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2.4s var(--ease-out) forwards .2s}
+.stitchin{opacity:0;animation:fadein .8s ease-out forwards 1.6s}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadein{to{opacity:1}}
+
+/* ---------- idea quote ---------- */
+.idea{font-size:var(--step-2);line-height:1.3;color:var(--sand-hi);font-style:italic;max-width:30ch;text-wrap:balance}
+.idea-l{font-family:var(--font-display);color:var(--saffron);font-size:1rem;letter-spacing:.05em}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:0;padding:0;list-style:none}
+.rules li{display:grid;gap:6px;align-content:start;padding-top:12px;border-top:1.5px dashed var(--line)}
+.rules h3{font-size:1.2rem}
+.rules p{font-size:var(--step--1);color:var(--sand-dim)}
+
+/* ---------- sort game ---------- */
+.pile{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.card{position:relative;text-align:left;padding:14px 16px;border-radius:var(--radius);background:rgba(11,19,48,.45);border:1.5px solid rgba(220,200,160,.25);font-size:var(--step--1);line-height:1.45;color:var(--sand-hi);transition:border-color .15s ease,transform .15s var(--ease-out),background-color .15s ease}
+.card:hover{border-color:var(--sand)}
+.card[aria-pressed="true"]{border-color:var(--saffron);background:rgba(232,178,63,.12);transform:translateY(-3px)}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bin{display:grid;gap:10px;align-content:start;min-height:150px;padding:14px;border-radius:var(--radius);border:2px dashed rgba(220,200,160,.3);background:rgba(8,13,34,.35);text-align:left;transition:border-color .15s ease,background-color .15s ease}
+.bin.armed{border-color:var(--saffron);background:rgba(232,178,63,.06)}
+.bin-h{font-family:var(--font-display);font-weight:700;text-transform:uppercase;font-size:1.35rem;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:baseline}
+.bin.opp .bin-h{color:var(--saffron)}
+.bin.obs .bin-h{color:#e58b7c}
+.bin-h small{font-size:.95rem;color:var(--sand-dim);font-variant-numeric:tabular-nums}
+.placed{font-size:.88rem;line-height:1.45;padding:8px 10px;border-radius:4px;background:rgba(24,34,78,.8);border-left:3px solid #9cbf6a;animation:enter .35s var(--ease-out) both}
+.placed.bad{border-left-color:#e0705f}
+.placed em{display:block;color:var(--sand-dim);font-size:.82rem;margin-top:4px}
+.hint{font-size:var(--step--1);color:var(--sand-dim)}
+
+/* ---------- map ---------- */
+.mapwrap{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start}
+.map{position:relative;width:100%;max-width:100%;aspect-ratio:600/430}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.pin{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border:0;background:none;display:grid;place-items:center;padding:0}
+.pin::before{content:"";width:14px;height:14px;transform:rotate(45deg);background:var(--night);border:2px solid var(--sand);transition:background-color .2s ease,border-color .2s ease,transform .2s var(--ease-out)}
+.pin:hover::before{transform:rotate(45deg) scale(1.2)}
+.pin.seen::before{background:var(--madder);border-color:#e58b7c}
+.pin.on::before{background:var(--saffron);border-color:var(--saffron);transform:rotate(45deg) scale(1.3)}
+.pin span{position:absolute;top:34px;left:50%;transform:translateX(-50%);font-family:var(--font-display);font-size:.85rem;white-space:nowrap;color:var(--sand-hi);text-shadow:0 1px 3px var(--night),0 0 6px var(--night);pointer-events:none}
+.place{display:grid;gap:10px;padding:18px;border-radius:var(--radius);background:rgba(8,13,34,.5);border:1px solid var(--line);min-height:200px;align-content:start}
+.place h3{color:var(--saffron)}
+.place p{font-size:var(--step--1);line-height:1.55}
+.place .yr{font-family:var(--font-display);color:var(--sand-dim);font-variant-numeric:tabular-nums}
+.count{font-family:var(--font-display);color:var(--sand-dim);font-size:.95rem;font-variant-numeric:tabular-nums}
+
+/* ---------- final ---------- */
+.tl{overflow-x:auto;margin-inline:-4px;padding:4px}
+.tl svg{display:block;min-width:600px;width:100%;height:auto}
+.verdict{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.verdict>div{display:grid;gap:8px;align-content:start;padding:18px;border-radius:var(--radius);background:rgba(8,13,34,.45)}
+.verdict .r{border-top:3px solid var(--madder)}
+.verdict .a{border-top:3px solid var(--saffron)}
+.verdict h3{font-size:1.4rem}
+.verdict p{font-size:var(--step--1);color:var(--sand)}
+.answer{font-size:var(--step-1);line-height:1.45;color:var(--sand-hi);max-width:52ch}
+.path{display:grid;gap:10px;padding-top:16px;border-top:1.5px dashed var(--line)}
+.path .meters{gap:28px}
+
+/* ---------- quiz ---------- */
+.qprog{display:flex;gap:6px}
+.qprog i{width:12px;height:12px;transform:rotate(45deg);border:1.5px solid var(--sand-dim)}
+.qprog i.ok{background:#9cbf6a;border-color:#9cbf6a}
+.qprog i.no{background:#e0705f;border-color:#e0705f}
+.qprog i.cur{border-color:var(--saffron);box-shadow:0 0 0 3px rgba(232,178,63,.2)}
+.explain{font-size:var(--step--1);color:var(--sand);padding-left:14px;border-left:2px solid var(--saffron-dim);animation:enter .35s var(--ease-out) both}
+
+/* ---------- result ---------- */
+.result{display:grid;justify-items:start;gap:18px}
+.score{font-family:var(--font-display);font-weight:700;font-size:clamp(5rem,16vw,9rem);line-height:.85;color:var(--saffron);font-variant-numeric:tabular-nums}
+.score small{font-size:.4em;color:var(--sand-dim)}
+.rank{font-size:var(--step-3)}
+
+@media (max-width:860px){
+  .cols,.mapwrap{grid-template-columns:minmax(0,1fr)}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .medal{width:min(70vw,300px);order:-1}
+  .rules{grid-template-columns:minmax(0,1fr)}
+  .trail .lbl{display:none}
+}
+@media (max-width:560px){
+  .bins,.verdict{grid-template-columns:minmax(0,1fr)}
+  .meters{gap:12px}
+  .beads i{width:7px;height:7px}
+  .opt{grid-template-columns:36px 1fr;gap:10px}
+  .opt-k{width:34px;height:34px;font-size:1.1rem}
+  .pin span{font-size:.75rem;top:30px}
+}
+@media (prefers-reduced-motion:reduce){
+  .scene,.scene.leaving,.outcome,.placed,.explain{animation:none}
+  .stamp{animation:none}
+  .floater{animation:none;opacity:0}
+  .draw{animation:none;stroke-dashoffset:0}
+  .stitchin{animation:none;opacity:1}
+  .btn,.opt,.card,.pin::before,.beads i{transition:none}
+}
+</style>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<svg class="defs" aria-hidden="true" focusable="false"><defs id="defs"></defs></svg>
+
+<div class="app">
+  <header class="hud" id="hud" hidden>
+    <ol class="trail" id="trail" aria-label="Ойын жолы"></ol>
+    <div class="meters" id="meters" aria-live="polite"></div>
+  </header>
+  <main id="stage" aria-live="polite"></main>
+</div>
+
+<script>
+(() => {
+"use strict";
+const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+/* ================= ORNAMENT: қошқар мүйіз ================= */
+function hornD(a, s, k = 0.19, tmax = Math.PI * 2.25) {
+  let d = "";
+  for (let t = 0, i = 0; t <= tmax + 1e-6; t += 0.1, i++) {
+    const r = a * Math.exp(-k * t);
+    const x = s * (-a + r * Math.cos(t));
+    const y = -r * Math.sin(t);
+    d += (i ? "L" : "M") + x.toFixed(2) + " " + y.toFixed(2) + " ";
+  }
+  return d;
+}
+function motifD(a, stem) { return hornD(a, 1) + hornD(a, -1) + `M0 0L0 ${stem}`; }
+const diamond = (x, y, r) => `M${x} ${y - r}L${x + r} ${y}L${x} ${y + r}L${x - r} ${y}Z`;
+
+(function buildDefs() {
+  const m = motifD(7, 9);
+  document.getElementById("defs").innerHTML = `
+  <pattern id="band" width="56" height="30" patternUnits="userSpaceOnUse">
+    <path d="M0 3H56M0 27H56" stroke="#7c2520" stroke-width="2.4" fill="none"/>
+    <path d="M0 3H56M0 27H56" stroke="#e8b23f" stroke-width="1.1" stroke-dasharray="3 2.4" fill="none"/>
+    <g transform="translate(28 17)">
+      <path d="${m}" stroke="#7c2520" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${m}" stroke="#e8b23f" stroke-width="1.3" fill="none" stroke-dasharray="2.6 1.8" stroke-linecap="round"/>
+    </g>
+    <path d="${diamond(0, 15, 3.4)}${diamond(56, 15, 3.4)}" fill="#b23a2f"/>
+  </pattern>`;
+})();
+const band = () => `<div class="band" aria-hidden="true"><svg preserveAspectRatio="none"><rect width="100%" height="30" fill="url(#band)"/></svg></div>`;
+
+function rosetteSVG() {
+  const a = 30, stem = 56;
+  const md = motifD(a, stem);
+  const groups = [0, 90, 180, 270].map(r => `<g transform="rotate(${r}) translate(0 ${-stem})">#</g>`);
+  const layer = (attrs) => groups.map(g => g.replace("#", `<path d="${md}" ${attrs}/>`)).join("");
+  const frame = "M-100 -100H100V100H-100Z M-90 -90H90V90H-90Z";
+  const diags = [[-78, -78], [78, -78], [78, 78], [-78, 78]].map(([x, y]) => diamond(x, y, 7)).join("");
+  const small = motifD(10, 8);
+  const corners = [[-78, -78, 45], [78, -78, 135], [78, 78, 225], [-78, 78, 315]];
+  return `<svg viewBox="-112 -112 224 224" role="img" aria-label="Қошқар мүйіз ою-өрнегі">
+    <path d="${frame}" fill="none" stroke="#7c2520" stroke-width="3" pathLength="1" class="draw"/>
+    ${layer('fill="none" stroke="#b23a2f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" pathLength="1" class="draw"')}
+    <g class="stitchin">
+      <path d="${frame}" fill="none" stroke="#e8b23f" stroke-width="1.2" stroke-dasharray="3 2.4"/>
+      ${layer('fill="none" stroke="#e8b23f" stroke-width="2" stroke-dasharray="4 2.6" stroke-linecap="round"')}
+      ${layer('fill="none" stroke="#dcc8a0" stroke-width=".8" stroke-dasharray="1.5 3" stroke-linecap="round" transform="translate(0 0)"')}
+      <path d="${diamond(0, 0, 13)}" fill="#e8b23f"/><path d="${diamond(0, 0, 6)}" fill="#7c2520"/>
+      <path d="${diags}" fill="#b23a2f"/>
+      ${corners.map(([x, y, r]) => `<g transform="translate(${x} ${y}) rotate(${r}) translate(0 -12)"><path d="${small}" fill="none" stroke="#e8b23f" stroke-width="1.2" stroke-dasharray="2 1.6"/></g>`).join("")}
+    </g></svg>`;
+}
+
+/* ================= FELT TEXTURE ================= */
+(function makeFelt() {
+  try {
+    const c = document.createElement("canvas"); c.width = c.height = 200;
+    const g = c.getContext("2d");
+    for (let i = 0; i < 1800; i++) {
+      const x = Math.random() * 200, y = Math.random() * 200, l = 2 + Math.random() * 8, a = Math.random() * Math.PI * 2;
+      g.strokeStyle = Math.random() < .55 ? `rgba(255,240,210,${.025 + Math.random() * .04})` : `rgba(0,0,12,${.05 + Math.random() * .06})`;
+      g.lineWidth = .7; g.beginPath(); g.moveTo(x, y);
+      g.quadraticCurveTo(x + Math.cos(a + 1) * l * .5, y + Math.sin(a + 1) * l * .5, x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke();
+    }
+    document.documentElement.style.setProperty("--felt-tex", `url(${c.toDataURL()})`);
+  } catch (e) {}
+})();
+
+/* ================= SKY CANVAS ================= */
+const sky = (() => {
+  const cv = document.getElementById("sky"), ctx = cv.getContext("2d");
+  let W = 0, H = 0, DPR = 1, stars = [], streaks = [], tufts = [], running = false, last = 0, T = 0;
+  let px = 0, py = 0, tx = 0, ty = 0;
+  const layers = [
+    { base: .70, amp: .030, sp: .010, depth: .12, col: "#16214a", f: [1.1, 2.7, 5.3] },
+    { base: .765, amp: .036, sp: .016, depth: .28, col: "#1c2551", f: [.9, 2.1, 4.4] },
+    { base: .835, amp: .042, sp: .026, depth: .52, col: "#25284b", f: [.8, 1.9, 3.6] },
+    { base: .915, amp: .048, sp: .040, depth: .9, col: "#2e2840", f: [.7, 1.6, 3.1] },
+  ];
+  layers.forEach(l => l.ph = [Math.random() * 6, Math.random() * 6, Math.random() * 6]);
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  function ridge(l, x, t) {
+    const u = (x / W) * Math.PI * 2;
+    return H * l.base + H * l.amp * (
+      Math.sin(u * l.f[0] + l.ph[0] + t * l.sp) * .62 +
+      Math.sin(u * l.f[1] + l.ph[1] - t * l.sp * 1.4) * .28 +
+      Math.sin(u * l.f[2] + l.ph[2] + t * l.sp * 2.1) * .10);
+  }
+  function seed() {
+    const n = Math.min(460, Math.round(W * H / 2400));
+    stars = Array.from({ length: n }, () => ({
+      x: Math.random() * W, y: Math.pow(Math.random(), 1.5) * H * .78,
+      r: Math.pow(Math.random(), 3) * 1.5 + .3, a: rnd(.35, .95), ph: Math.random() * 6.3, sp: rnd(.4, 1.6),
+      d: rnd(.1, 1), warm: Math.random() < .12,
+    }));
+    streaks = Array.from({ length: Math.round(W / 16) }, () => newStreak(true));
+    tufts = [];
+    for (let x = -20; x < W + 20; x += rnd(18, 46)) if (Math.random() < .55) tufts.push({ x, n: 3 + (Math.random() * 4 | 0), h: rnd(18, 42), ph: Math.random() * 6 });
+  }
+  function newStreak(any) {
+    return { x: any ? Math.random() * W : -60, y: rnd(H * .58, H), len: rnd(14, 60), sp: rnd(60, 190), a: rnd(.04, .14), wob: Math.random() * 6 };
+  }
+  function resize() {
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    seed(); if (!running) draw(0);
+  }
+  function draw(dt) {
+    T += dt;
+    px += (tx - px) * .05; py += (ty - py) * .05;
+    const sc = Math.min(window.scrollY || 0, 1200);
+    // sky
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, "#060c22"); g.addColorStop(.45, "#0d173c"); g.addColorStop(.72, "#1b2552"); g.addColorStop(1, "#231f3c");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    const hz = ctx.createRadialGradient(W * .7, H * .74, 10, W * .7, H * .74, W * .7);
+    hz.addColorStop(0, "rgba(178,58,47,.16)"); hz.addColorStop(.5, "rgba(232,178,63,.04)"); hz.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = hz; ctx.fillRect(0, 0, W, H);
+    // milky band
+    ctx.save(); ctx.translate(W * .5 + px * 6, H * .3 - sc * .02); ctx.rotate(-.42);
+    const mb = ctx.createLinearGradient(0, -H * .12, 0, H * .12);
+    mb.addColorStop(0, "rgba(180,190,230,0)"); mb.addColorStop(.5, "rgba(180,190,230,.05)"); mb.addColorStop(1, "rgba(180,190,230,0)");
+    ctx.fillStyle = mb; ctx.fillRect(-W, -H * .12, W * 2, H * .24); ctx.restore();
+    // stars
+    for (const s of stars) {
+      const tw = reduceMQ.matches ? 1 : .65 + .35 * Math.sin(T * s.sp + s.ph);
+      const x = s.x + px * s.d * 10, y = s.y + py * s.d * 6 - sc * s.d * .06;
+      ctx.globalAlpha = s.a * tw;
+      ctx.fillStyle = s.warm ? "#f3d08a" : "#eef0ff";
+      ctx.beginPath(); ctx.arc(x, y, s.r, 0, 6.283); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    // Темірқазық & Жетіқарақшы
+    const u = Math.min(W, H * 1.4) * .5, ox = W * .86 + px * 4, oy = H * .1 + py * 3 - sc * .03;
+    const pol = [ox, oy];
+    const dip = [[-.36, .26], [-.34, .40], [-.47, .44], [-.49, .30], [-.58, .25], [-.66, .23], [-.76, .16]].map(([a, b]) => [ox + a * u, oy + b * u]);
+    ctx.strokeStyle = "rgba(220,200,160,.10)"; ctx.lineWidth = 1;
+    ctx.beginPath(); [0, 1, 2, 3, 0].forEach((i, k) => k ? ctx.lineTo(...dip[i]) : ctx.moveTo(...dip[i]));
+    ctx.moveTo(...dip[3]); dip.slice(4).forEach(p => ctx.lineTo(...p)); ctx.stroke();
+    ctx.setLineDash([2, 5]); ctx.beginPath(); ctx.moveTo(...dip[0]); ctx.lineTo(...pol); ctx.stroke(); ctx.setLineDash([]);
+    dip.forEach(p => { ctx.fillStyle = "#f4f1e4"; ctx.beginPath(); ctx.arc(p[0], p[1], 1.7, 0, 6.283); ctx.fill(); });
+    const pg = ctx.createRadialGradient(pol[0], pol[1], 0, pol[0], pol[1], 14);
+    pg.addColorStop(0, "rgba(255,240,200,.9)"); pg.addColorStop(.25, "rgba(255,230,170,.25)"); pg.addColorStop(1, "rgba(255,230,170,0)");
+    ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(pol[0], pol[1], 14, 0, 6.283); ctx.fill();
+    if (W > 700) {
+      ctx.font = "13px 'PT Sans Narrow', sans-serif"; ctx.fillStyle = "rgba(220,200,160,.42)";
+      ctx.textAlign = "right"; ctx.fillText("Темірқазық", pol[0] - 12, pol[1] + 4);
+      ctx.textAlign = "left"; ctx.fillText("Жетіқарақшы", dip[6][0] - 10, dip[6][1] - 10);
+    }
+    // moon
+    const wide = W > 860;
+    const mx = (wide ? W * .52 : W * .08) + px * 3, my = (wide ? H * .09 : H * .07) + py * 2 - sc * .03, mr = wide ? Math.max(16, Math.min(26, W * .018)) : 13;
+    const mg = ctx.createRadialGradient(mx, my, mr * .5, mx, my, mr * 5);
+    mg.addColorStop(0, "rgba(242,231,205,.16)"); mg.addColorStop(1, "rgba(242,231,205,0)");
+    ctx.fillStyle = mg; ctx.beginPath(); ctx.arc(mx, my, mr * 5, 0, 6.283); ctx.fill();
+    ctx.save(); ctx.beginPath(); ctx.arc(mx, my, mr, 0, 6.283); ctx.clip();
+    ctx.fillStyle = "#efe2c2"; ctx.fillRect(mx - mr, my - mr, mr * 2, mr * 2);
+    ctx.fillStyle = "#0b1435"; ctx.beginPath(); ctx.arc(mx + mr * .45, my - mr * .2, mr * .95, 0, 6.283); ctx.fill();
+    ctx.restore();
+    // dunes
+    const tt = reduceMQ.matches ? 0 : T;
+    layers.forEach((l, i) => {
+      const off = px * l.depth * 26;
+      const lift = sc * l.depth * .05;
+      ctx.beginPath(); ctx.moveTo(0, H);
+      for (let x = 0; x <= W + 8; x += 8) ctx.lineTo(x, ridge(l, x + off, tt) - lift);
+      ctx.lineTo(W, H); ctx.closePath();
+      const dg = ctx.createLinearGradient(0, H * (l.base - l.amp), 0, H);
+      dg.addColorStop(0, l.col); dg.addColorStop(1, "#0d1230");
+      ctx.fillStyle = dg; ctx.fill();
+      ctx.beginPath();
+      for (let x = 0; x <= W + 8; x += 8) { const y = ridge(l, x + off, tt) - lift; x ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      ctx.strokeStyle = `rgba(232,214,176,${.05 + l.depth * .07})`; ctx.lineWidth = 1; ctx.stroke();
+      if (i === layers.length - 1) {
+        // feather grass (селеу)
+        const gust = reduceMQ.matches ? .3 : .5 + .5 * Math.sin(T * .35);
+        ctx.strokeStyle = "rgba(226,206,160,.32)"; ctx.lineWidth = 1;
+        for (const tf of tufts) {
+          const bx = tf.x, by = ridge(l, bx + off, tt) - lift + 2;
+          for (let k = 0; k < tf.n; k++) {
+            const spread = (k - tf.n / 2) * 3;
+            const sway = (reduceMQ.matches ? 4 : Math.sin(T * 1.6 + tf.ph + k * .5) * 4 + 8) * gust;
+            ctx.beginPath(); ctx.moveTo(bx + spread * .3, by);
+            ctx.quadraticCurveTo(bx + spread, by - tf.h * .6, bx + spread + sway, by - tf.h - k * 2);
+            ctx.stroke();
+          }
+        }
+      }
+    });
+    // wind streaks
+    if (!reduceMQ.matches) {
+      for (const s of streaks) {
+        s.x += s.sp * dt; s.y += Math.sin(T * 2 + s.wob) * .15;
+        if (s.x - s.len > W) Object.assign(s, newStreak(false));
+        const lg = ctx.createLinearGradient(s.x - s.len, 0, s.x, 0);
+        lg.addColorStop(0, "rgba(232,214,176,0)"); lg.addColorStop(1, `rgba(232,214,176,${s.a})`);
+        ctx.strokeStyle = lg; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(s.x - s.len, s.y); ctx.lineTo(s.x, s.y); ctx.stroke();
+      }
+    }
+  }
+  function loop(now) {
+    if (!running) return;
+    const dt = Math.min(.05, (now - (last || now)) / 1000); last = now;
+    if (!document.hidden) draw(dt);
+    requestAnimationFrame(loop);
+  }
+  function start() {
+    if (reduceMQ.matches) { running = false; draw(0); return; }
+    if (!running) { running = true; last = 0; requestAnimationFrame(loop); }
+  }
+  window.addEventListener("resize", resize);
+  window.addEventListener("pointermove", e => { tx = (e.clientX / W - .5) * 2; ty = (e.clientY / H - .5) * 2; }, { passive: true });
+  reduceMQ.addEventListener?.("change", () => { running = false; start(); });
+  if (document.fonts) document.fonts.ready.then(() => { if (!running) draw(0); });
+  resize(); start();
+  return { redraw: () => draw(0) };
+})();
+
+/* ================= GAME DATA ================= */
+const START = { trust: 5, force: 3, peace: 7 };
+const METERS = [
+  { k: "trust", l: "Ел сенімі", cls: "trust" },
+  { k: "force", l: "Жасақ", cls: "force" },
+  { k: "peace", l: "Ауыл амандығы", cls: "peace" },
+];
+const CHAPTERS = [
+  { n: "I", y: "1847", l: "Өзгеріс" },
+  { n: "II", y: "1847", l: "Таңдау" },
+  { n: "III", y: "1847–1855", l: "Дала соғысы" },
+  { n: "IV", y: "1857", l: "Шың" },
+  { n: "V", y: "1858", l: "Бітім" },
+  { n: "", y: "", l: "Қорытынды" },
+];
+const SCENE_CH = [-1, -1, 0, 1, 2, 3, 4, 5, 5, 5];
+
+const SORT_CARDS = [
+  { t: "Райым бекінісі салынды, жайылым мен суат тарылды", a: "obs", e: "Көшпелі ел үшін жер мен су ең басты байлық. Бекініс маңындағы жерлер ауылдардан тартып алынды." },
+  { t: "Бекініс жанында сауда ашылды: мал сатып, нан мен мата алуға болады", a: "opp", e: "Иә, бұл шынымен мүмкіндік еді. Кейбір ауылдар саудадан пайда көрді." },
+  { t: "Әр шаңырақтан түтін салығы жиналады", a: "obs", e: "Ақшасы жоқ отбасы малын сатуға мәжбүр болды. Кедейлерге бұл өте ауыр тиді." },
+  { t: "Хиуа мен Қоқан жасақтарының шабуылынан қорғаныс", a: "opp", e: "Сыр бойындағы ауылдарды Хиуа мен Қоқан әскерлері жиі шапқан. Бекіністер оларды тежеді." },
+  { t: "Бекініске арба, түйе және адам беру міндеті", a: "obs", e: "Бекіністерге жүк тасу үшін ауылдың көлігі мен күші пайдаланылды. Мал арықтап, шаруа тоқтады." },
+  { t: "Ел ісін енді патша тағайындаған сұлтан-билеуші шешеді", a: "obs", e: "Билердің дәстүрлі беделі әлсіреді. Ел ісіне сырттан басқарылатын адамдар араласты." },
+];
+
+const CH2 = {
+  kicker: ["II тарау", "1847"], title: "Есеттің таңдауы",
+  narr: [
+    "Шекті руының батыры Есет Көтібарұлы ауылдардың ақсақалдарын жинады. Әкесі Көтібар батыр да кезінде елін қорғаған. Енді кезек ұлына келді.",
+    "Ауылға салық жинаушы келді. Ел Есеттің аузына қарап отыр.",
+  ],
+  q: "Не істейсің?",
+  opts: [
+    { t: "Салықты төлейміз. Соғыс бәрінен жаман.", fx: { trust: -2, force: -1, peace: +1 }, note: "Ауыл бір жыл тыныш отырды. Бірақ жігіттер «батырымыз тайсалды» деп күбірлей бастады." },
+    { t: "Ауылды алысқа, Үстірт жаққа көшіреміз.", fx: { trust: +1, peace: -1 }, note: "Көшу оңай емес: мал арықтады. Есесіне шенеуніктер жете алмайтын жерге ұзадыңдар." },
+    { t: "Салық төлемейміз. Жасақ жинаймыз.", fx: { trust: +2, force: +2, peace: -1 }, note: "Жігіттер ат ерттеді. Бұл жол ұзақ әрі қатерлі болады." },
+  ],
+  hist: 2, stamp: "Қарсы шығу",
+  histText: [
+    "Есет салық төлеуден бас тартып, 1847 жылы ашық көтеріліс бастады. Оған Шекті руының және көрші рулардың жігіттері қосылды.",
+    "Дәл сол жылы Кенесары хан қаза тапқан еді. Бірақ Кіші жүзде күрес тоқтаған жоқ.",
+  ],
+  gloss: { t: "Батыр", d: "Елді жаудан қорғаған ер. Батырдың беделі шенеуніктің берген лауазымынан емес, халықтың сенімінен туады." },
+};
+
+const PLACES = [
+  { id: "orb", x: 33, y: 8, n: "Орынбор", yr: "", t: "Патша әкімшілігінің орталығы. Кіші жүзді басқару жоспарлары мен жазалаушы отрядтар осы жақтан шықты." },
+  { id: "mug", x: 54, y: 36, n: "Мұғалжар мен Ембі", yr: "", t: "Көтерілістің негізгі ауданы. Таулы, сулы, кең жер: жасақ жасырынып, ауылдар малын бағуға ыңғайлы." },
+  { id: "irg", x: 77, y: 26, n: "Ырғыз", yr: "1845", t: "Орынбордан Сырға баратын жол бойындағы бекініс. Азық-түлік пен қару тиелген керуендер осы жолмен жүрді." },
+  { id: "rai", x: 82, y: 58, n: "Райым бекінісі", yr: "1847", t: "Сырдарияның сағасындағы алғашқы бекініс. Оны азық-түлікпен қамтамасыз ету үшін Орынбордан керуен тасылды. Есеттің жігіттері осы керуен жолдарына шабуыл жасады." },
+  { id: "akm", x: 95, y: 49, n: "Ақмешіт", yr: "1853", t: "1853 жылы генерал Перовский Қоқан бекінісі Ақмешітті алды. Сыр бойындағы бекіністер тізбегі ұзарып, далаға қысым күшейді." },
+  { id: "ust", x: 47, y: 84, n: "Үстірт", yr: "", t: "Жазалаушы отряд қуғанда ауылдар Үстірт пен құмды жерлерге қарай көшіп кететін. Қуғыншыларға бұл жерде су мен жол табу қиын еді." },
+];
+const CH3Q = {
+  q: "Сонымен, Есет жасағы қалай соғысты?",
+  opts: [
+    { t: "Зеңбірекпен ашық шайқасқа шықты", ok: false },
+    { t: "Атпен кенет шабуыл жасап, далаға сіңіп кетті", ok: true },
+    { t: "Бекіністерді айлап қоршап отырды", ok: false },
+  ],
+  okText: "Дұрыс. Атты жасақ керуенге кенеттен тиісіп, жазалаушылар жеткенше далаға сіңіп кететін. Зеңбірегі бар әскерге ашық шайқаста төтеп беру мүмкін емес еді.",
+  noText: "Жоқ. Есеттің зеңбірегі болмаған. Оның қаруы жылдамдық пен даланы бес саусағындай білу еді: кенет шабуыл, сосын далаға сіңіп кету.",
+};
+
+const CH4 = {
+  kicker: ["IV тарау", "1856–1857"], title: "Көтерілістің шыңы",
+  narr: [
+    "Көтеріліс он жылға жуық созылды. 1856 жылы Сыр бойында Жанқожа батыр да халықты соңынан ертті.",
+    "Кіші жүздің шығыс бөлігін билеген сұлтан Арыстан Жантөрин патша әкімшілігіне адал қызмет етіп, көтерілісшілерге қарсы шықты. Оның жасағы Есеттің ауылдарына жақындап келеді.",
+  ],
+  q: "Не істейсің?",
+  opts: [
+    { t: "Сұлтанды келіссөзге шақырамыз.", fx: { trust: -1, peace: +1 }, note: "Сұлтан келіссөзді әлсіздік деп түсінді. Жігіттердің көңілі қайтты." },
+    { t: "Алдын ала соққы береміз.", fx: { trust: +1, force: +1, peace: -2 }, note: "Шайқас қатты болды. Жеңіс бар, бірақ ауылдар енді кекті күтеді." },
+    { t: "Шегініп, Мұғалжар тауларына тығыламыз.", fx: { trust: -1, force: -1 }, note: "Жасақ аман қалды, бірақ сұлтанның адамдары ауылдарды басып өтті." },
+  ],
+  hist: 1, stamp: "Қарсы шығу",
+  histText: [
+    "1857 жылы Есеттің жасағы сұлтан Арыстан Жантөринді өлтірді. Бұл көтерілістің ең биік шыңы болды.",
+    "Бірақ артынша патша үкіметі ірі жазалаушы отрядтар жіберді. Ауылдар шабылды, мал азайды, ел шаршады.",
+  ],
+  histFx: { peace: -2, force: -1 }, histFxText: "Жазалаушы отрядтар келді",
+  gloss: { t: "Сұлтан-билеуші", d: "Патша үкіметі тағайындаған басқарушы. 1824 жылдан бастап Кіші жүз үш бөлікке бөлініп, әр бөлікті осындай сұлтан басқарды." },
+};
+
+const CH5 = {
+  kicker: ["V тарау", "1858"], title: "Бітім",
+  narr: [
+    "1858 жыл. Он бір жылғы соғыс. Жігіттердің біразы қаза тапты, ауылдар көшіп-қонудан қалжырады, малдың саны азайды.",
+    "Осы кезде патша әкімшілігі Есетке кешірім беруге дайын екенін білдірді.",
+  ],
+  q: "Енді қайтесің?",
+  opts: [
+    { t: "Соғысты жалғастырамыз. Бас имейміз.", fx: { force: -2, peace: -2 }, note: "Жасақ азайып барады. Ауылдардың енді көшуге де шамасы жоқ." },
+    { t: "Бітімге келеміз. Елді сақтау керек.", fx: { peace: +3, force: -1 }, note: "Ауылдарға тыныштық орала бастады. Жігіттер үйлеріне қайтты." },
+  ],
+  hist: 1, stamp: "Бейімделу", adapt: true,
+  histText: [
+    "1858 жылы Есет патша үкіметімен бітімге келді. Оған кешірім берілді, кейін ол Шекті руларының биі болып тағайындалды.",
+    "Біз мұны жеңіліс деп ойламаймыз. Есет халқын сақтап қалу үшін жаңа жағдайға бейімделді.",
+  ],
+  gloss: { t: "Бітім", d: "Соғысты тоқтату туралы келісім. Бітім жасау әрқашан жеңілу емес: кейде бұл халықты сақтап қалудың жолы." },
+};
+
+const QUIZ = [
+  { q: "Есет батыр бастаған көтеріліс қай жылдары болды?", o: ["1837–1847", "1847–1858", "1867–1868"], a: 1, e: "Көтеріліс 1847 жылы басталып, 1858 жылғы бітіммен аяқталды. Он бір жыл." },
+  { q: "Есет Көтібарұлы қай рудан шыққан?", o: ["Адай", "Арғын", "Шекті"], a: 2, e: "Есет Кіші жүздің Шекті руынан шыққан. Оның әкесі Көтібар да батыр болған." },
+  { q: "1847 жылы Сырдарияның сағасында қандай бекініс салынды?", o: ["Райым", "Ақмешіт", "Верный"], a: 0, e: "Райым бекінісі 1847 жылы салынды. Ақмешітті Перовский 1853 жылы Қоқаннан тартып алды." },
+  { q: "1857 жылы көтерілісшілер кімді өлтірді?", o: ["Генерал Перовскийді", "Сұлтан Арыстан Жантөринді", "Кенесары ханды"], a: 1, e: "Патшаға адал қызмет еткен сұлтан-билеуші Арыстан Жантөрин 1857 жылы өлтірілді. Бұл көтерілістің шыңы еді." },
+  { q: "1858 жылғы бітім біздің зерттеу идеямыздың қай бөлігін көрсетеді?", o: ["Қоғамның қарсы шығуын", "Қоғамның бейімделуін", "Ештеңе өзгермегенін"], a: 1, e: "1847–1857 жылдары халық қарсы шықты, ал 1858 жылы жаңа жағдайға бейімделді." },
+];
+
+/* ================= STATE ================= */
+const fresh = () => ({ scene: 0, m: { ...START }, picks: {}, sorted: {}, seen: [], ch3: null, quiz: [], qi: 0 });
+let S = fresh();
+const hot = window.claude && window.claude.hot;
+if (hot && hot.snapshot) try { hot.snapshot(() => S); } catch (e) {}
+
+const stage = $("#stage"), hud = $("#hud");
+const clamp = v => Math.max(0, Math.min(10, v));
+const minus = n => (n > 0 ? "+" + n : "−" + Math.abs(n));
+
+function renderHud() {
+  const ch = SCENE_CH[S.scene];
+  hud.hidden = ch < 0;
+  $("#trail").innerHTML = CHAPTERS.map((c, i) => `<li class="${i < ch ? "done" : i === ch ? "now" : ""}" ${i === ch ? 'aria-current="step"' : ""}><span class="knot"></span>${c.n ? `<span class="yr">${c.n}</span>` : ""}<span class="lbl">${c.n ? c.l : c.l}</span></li>`).join("");
+  $("#meters").innerHTML = METERS.map(mt => meterHTML(mt, S.m[mt.k])).join("");
+}
+function meterHTML(mt, v) {
+  return `<div class="meter ${mt.cls}" data-k="${mt.k}"><div class="meter-l"><span>${mt.l}</span><b>${v}/10</b></div><div class="beads" aria-hidden="true">${Array.from({ length: 10 }, (_, i) => `<i class="${i < v ? "on" : ""}"></i>`).join("")}</div></div>`;
+}
+function applyFx(fx) {
+  if (!fx) return;
+  Object.entries(fx).forEach(([k, d]) => {
+    if (!d) return;
+    S.m[k] = clamp(S.m[k] + d);
+    const el = $(`#meters .meter[data-k="${k}"]`);
+    if (el) {
+      el.outerHTML = meterHTML(METERS.find(m => m.k === k), S.m[k]);
+      const ne = $(`#meters .meter[data-k="${k}"]`);
+      const f = document.createElement("span");
+      f.className = "floater " + (d > 0 ? "up" : "down"); f.textContent = minus(d);
+      ne.appendChild(f); setTimeout(() => f.remove(), 1400);
+    }
+  });
+}
+function fxText(fx) {
+  return Object.entries(fx).filter(([, d]) => d).map(([k, d]) => `${METERS.find(m => m.k === k).l} ${minus(d)}`).join(", ");
+}
+
+function go(i) {
+  const old = $(".scene", stage);
+  const swap = () => {
+    S.scene = i; renderHud(); SCENES[i]();
+    window.scrollTo({ top: 0, behavior: "auto" });
+    const h = $("h1, h2", stage); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
+  };
+  if (old && !reduceMQ.matches) { old.classList.add("leaving"); setTimeout(swap, 170); } else swap();
+}
+const panel = (inner) => `<section class="scene felt">${band()}<div class="panel-body">${inner}</div>${band()}</section>`;
+const glossHTML = (g) => `<aside class="gloss"><span class="gl-h">Сөздік</span><dl><dt>${g.t}</dt><dd>${g.d}</dd></dl></aside>`;
+const kick = (k) => `<p class="kicker"><span>${k[0]}</span><span class="yr">${k[1]}</span></p>`;
+
+/* ================= SCENES ================= */
+function sIntro() {
+  stage.innerHTML = `<section class="scene hero">
+    <div class="hero-copy">
+      <p class="hero-pre">Қазақстан тарихы. 9 «В» сыныптың жобасы</p>
+      <h1><span>Есет</span><span>батыр</span></h1>
+      <p class="hero-sub">бастаған ұлт-азаттық көтеріліс<span class="yr">1847–1858</span></p>
+      <p class="hero-lead">Он бір жыл, бір дала, бір сұрақ: өзгеріске қарсы тұру керек пе, әлде бейімделу керек пе? Есеттің жолын өзің жүріп өт.</p>
+      <div class="row"><button class="btn" id="go">Жолға шығу</button><span class="authors">10 минуттық ойын</span></div>
+      <p class="authors">Авторлары: <b>Маулен</b>, <b>Сагди</b>, <b>Ералы</b></p>
+    </div>
+    <div class="medal" aria-hidden="false"><div class="felt"></div>${rosetteSVG()}</div>
+  </section>`;
+  $("#go").onclick = () => go(1);
+}
+
+function sIdea() {
+  stage.innerHTML = panel(`
+    <p class="idea-l">Біздің зерттеу идеямыз</p>
+    <h2 class="idea">«Өзгерістер салдарынан туындаған мүмкіндіктер мен кедергілерге қоғам бейімделуі немесе қарсы шығуы мүмкін.»</h2>
+    <p class="lead">Біз осы ойды Есет батыр көтерілісі арқылы тексердік. Енді кезек сенде. Сен 1847 жылғы далаға барасың, Есеттің орнында шешім қабылдайсың, ал әр шешімнен кейін тарихта шынында не болғанын көресің.</p>
+    <ul class="rules">
+      <li><h3>Ел сенімі</h3><p>Халық саған қаншалықты сенеді. Батыл әрі әділ шешімде өседі.</p>${meterHTML(METERS[0], START.trust)}</li>
+      <li><h3>Жасақ</h3><p>Қасыңдағы жігіттердің саны мен күші.</p>${meterHTML(METERS[1], START.force)}</li>
+      <li><h3>Ауыл амандығы</h3><p>Қарапайым отбасылардың тыныштығы. Соғыс оны азайтады.</p>${meterHTML(METERS[2], START.peace)}</li>
+    </ul>
+    <p>Үшеуін бірдей ұстап тұру қиын. Есетке де оңай болмаған.</p>
+    <button class="btn" id="next">Бірінші тарауды бастау</button>`);
+  $("#next").onclick = () => go(2);
+}
+
+function sSort() {
+  let sel = null;
+  const order = S.sortOrder || (S.sortOrder = SORT_CARDS.map((_, i) => i).sort(() => Math.random() - .5));
+  stage.innerHTML = panel(`
+    ${kick(["I тарау", "1847"])}
+    <h2>Далаға келген өзгеріс</h2>
+    <div class="cols"><div class="main">
+      <p class="lead">1847 жыл. Сырдария Аралға құятын жерде патша әскері Райым бекінісін салып жатыр.</p>
+      <p>Бұрын малымыз еркін жайылған өрістерге енді бекіністер мен шептер тартылды. Ауылға шенеуніктер келіп, әр шаңыраққа салық салды. Әр өзгеріс халыққа не әкелді: мүмкіндік пе, кедергі ме?</p>
+      <p class="hint" id="hint">Карточканы бас, сосын оны тиісті себетке сал.</p>
+      <div class="pile" id="pile"></div>
+      <div class="bins">
+        <button class="bin opp" data-a="opp"><span class="bin-h">Мүмкіндік <small id="c-opp">0</small></span><span class="bin-list" id="l-opp"></span></button>
+        <button class="bin obs" data-a="obs"><span class="bin-h">Кедергі <small id="c-obs">0</small></span><span class="bin-list" id="l-obs"></span></button>
+      </div>
+      <div id="sortEnd"></div>
+    </div>${glossHTML({ t: "Түтін салығы", d: "Әр шаңырақтан, яғни әр «түтіннен» алынатын ақшалай салық. Кіші жүзде ол 1837 жылдан бастап бір шаңырақтан 1 сом 50 тиын көлемінде жиналды." })}</div>`);
+  const pile = $("#pile");
+  function paint() {
+    pile.innerHTML = order.filter(i => !(i in S.sorted)).map(i => `<button class="card" data-i="${i}" aria-pressed="${sel === i}">${SORT_CARDS[i].t}</button>`).join("");
+    ["opp", "obs"].forEach(b => {
+      const items = order.filter(i => S.sorted[i] === b);
+      $("#c-" + b).textContent = items.length;
+      $("#l-" + b).innerHTML = items.map(i => { const c = SORT_CARDS[i], ok = c.a === b; return `<span class="placed ${ok ? "" : "bad"}" style="display:block">${c.t}<em>${ok ? "" : "Шын мәнінде бұл " + (c.a === "opp" ? "мүмкіндік" : "кедергі") + ". "}${c.e}</em></span>`; }).join("");
+    });
+    $$(".bin").forEach(b => b.classList.toggle("armed", sel !== null));
+    $$(".card", pile).forEach(c => c.onclick = () => { sel = sel === +c.dataset.i ? null : +c.dataset.i; paint(); const again = $(`.card[data-i="${sel}"]`, pile); if (again) again.focus(); });
+    if (Object.keys(S.sorted).length === SORT_CARDS.length) finish();
+  }
+  $$(".bin").forEach(b => b.onclick = () => {
+    if (sel === null) { $("#hint").textContent = "Алдымен жоғарыдағы карточканың бірін таңда."; return; }
+    S.sorted[sel] = b.dataset.a; sel = null; paint();
+    const first = $(".card", pile); if (first) first.focus();
+  });
+  function finish() {
+    if ($("#sortEnd").childElementCount) return;
+    const right = SORT_CARDS.filter((c, i) => S.sorted[i] === c.a).length;
+    $("#hint").hidden = true;
+    $("#sortEnd").innerHTML = `<div class="outcome">
+      <div class="history"><h4>Таразы қай жаққа ауды?</h4>
+      <p>Дұрыс сұрыпталғаны: ${right}/6. Тарихта 4 кедергі мен 2 мүмкіндік болды. Шекті руының ауылдары үшін өзгерістің ауыртпалығы оның пайдасынан әлдеқайда басым түсті. Халықтың ашуы осылай жиналды.</p></div>
+      <button class="btn" id="next">Әрі қарай</button></div>`;
+    $("#next").onclick = () => go(3);
+  }
+  paint();
+}
+
+function sChoice(d, key, nextIdx) {
+  return () => {
+    const dyn = key === "ch5" ? [`Шкалаларыңа қара: ауыл амандығы қазір ${S.m.peace}/10, жасақ ${S.m.force}/10.`] : [];
+    stage.innerHTML = panel(`
+      ${kick(d.kicker)}<h2>${d.title}</h2>
+      <div class="cols"><div class="main">
+        <p class="lead">${d.narr[0]}</p>${d.narr.slice(1).concat(dyn).map(p => `<p>${p}</p>`).join("")}
+        <h3 class="q">${d.q}</h3>
+        <div class="opts">${d.opts.map((o, i) => `<button class="opt" data-i="${i}"><span class="opt-k">${"АӘБ"[i]}</span><span>${o.t}</span></button>`).join("")}</div>
+        <div id="out"></div>
+      </div>${glossHTML(d.gloss)}</div>`);
+    const show = (i, fresh) => {
+      $$(".opt").forEach(b => { b.disabled = true; b.classList.toggle("picked", +b.dataset.i === i); });
+      const o = d.opts[i], same = i === d.hist;
+      $("#out").innerHTML = `<div class="outcome">
+        <p class="yours"><b>Сенің жолың.</b>${o.note} <span class="event">(${fxText(o.fx)})</span></p>
+        <div class="history"><h4>Тарихта шынында не болды</h4>
+          ${d.histText.map(p => `<p>${p}</p>`).join("")}
+          <span class="stamp ${d.adapt ? "adapt" : ""}">${d.stamp}</span>
+          ${d.histFx ? `<p class="event"><b>${d.histFxText}:</b> ${fxText(d.histFx)}</p>` : ""}
+          <p class="event">${same ? "Сенің таңдауың Есеттің таңдауымен сәйкес келді." : "Есет басқа жолды таңдады: «" + d.opts[d.hist].t + "»"}</p>
+        </div>
+        <button class="btn" id="next">${nextIdx === 7 ? "Қорытындыға өту" : "Келесі тарау"}</button></div>`;
+      if (fresh) { applyFx(o.fx); if (d.histFx) setTimeout(() => applyFx(d.histFx), reduceMQ.matches ? 0 : 900); }
+      $("#next").onclick = () => go(nextIdx);
+    };
+    $$(".opt").forEach(b => b.onclick = () => { const i = +b.dataset.i; S.picks[key] = i; show(i, true); });
+    if (key in S.picks) show(S.picks[key], false);
+  };
+}
+
+function mapSVG() {
+  return `<svg viewBox="0 0 600 430" aria-hidden="true">
+    <defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><path d="M0 0V8" stroke="rgba(220,200,160,.14)" stroke-width="1.5"/></pattern></defs>
+    <path d="M0 230 C40 215 90 222 130 245 C160 262 175 300 168 340 C162 380 140 410 150 430 L0 430Z" fill="#0b1430" stroke="#dcc8a0" stroke-opacity=".5" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <text x="40" y="340" fill="rgba(220,200,160,.55)" font-family="PT Sans Narrow" font-size="15" letter-spacing="2">КАСПИЙ</text>
+    <path d="M410 268 C430 240 478 238 500 262 C520 285 512 330 490 345 C465 362 425 352 412 330 C400 310 398 285 410 268Z" fill="#0b1430" stroke="#dcc8a0" stroke-opacity=".5" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <text x="430" y="305" fill="rgba(220,200,160,.55)" font-family="PT Sans Narrow" font-size="15" letter-spacing="2">АРАЛ</text>
+    <path d="M230 345 C270 330 340 332 400 350 L405 430 L210 430Z" fill="url(#hatch)"/>
+    <path d="M600 200 C575 215 560 205 540 225 C525 240 515 245 500 258" fill="none" stroke="#6f8cc9" stroke-opacity=".7" stroke-width="2"/>
+    <text x="530" y="198" fill="rgba(160,180,220,.7)" font-family="PT Sans Narrow" font-size="13">Сырдария</text>
+    <path d="M320 165 C300 190 270 205 240 215 C205 228 180 240 160 252" fill="none" stroke="#6f8cc9" stroke-opacity=".7" stroke-width="2"/>
+    <text x="230" y="200" fill="rgba(160,180,220,.7)" font-family="PT Sans Narrow" font-size="13" transform="rotate(-18 230 200)">Ембі</text>
+    <path d="M520 95 C500 125 480 150 470 175" fill="none" stroke="#6f8cc9" stroke-opacity=".5" stroke-width="1.5"/>
+    <path d="M200 40 C260 70 360 90 462 112 C480 160 492 210 492 250" fill="none" stroke="#e8b23f" stroke-opacity=".55" stroke-width="1.6" stroke-dasharray="2 5"/>
+    <path d="M330 120 l10 -16 l10 16 M345 130 l9 -14 l9 14 M314 136 l8 -13 l8 13" fill="none" stroke="rgba(220,200,160,.45)" stroke-width="1.3"/>
+    <text x="210" y="62" fill="rgba(232,178,63,.55)" font-family="PT Sans Narrow" font-size="12" transform="rotate(14 210 62)">керуен жолы</text>
+  </svg>`;
+}
+
+function sMap() {
+  const all = () => S.seen.length === PLACES.length;
+  stage.innerHTML = panel(`
+    ${kick(["III тарау", "1847–1855"])}<h2>Дала соғысы</h2>
+    <div class="main">
+      <p class="lead">Есет бекіністерді жаулап алмақ болған жоқ. Оның күші басқада еді: ол даланы бес саусағындай білді.</p>
+      <p>Картадағы белгілерді басып, көтеріліс қай жерлерде жүргенін зертте. Барлық алты жерді көргенде, сұрақ ашылады.</p>
+      <div class="mapwrap">
+        <div class="map" id="map">${mapSVG()}${PLACES.map(p => `<button class="pin" style="left:${p.x}%;top:${p.y}%" data-id="${p.id}" aria-label="${p.n}"><span>${p.n}</span></button>`).join("")}</div>
+        <div class="place" id="place" aria-live="polite"><h3>Белгіні таңда</h3><p>Сары нүктелі сызық Орынбордан Сырға баратын керуен жолын көрсетеді. Есет жасағы дәл осы жолға қауіп төндірді.</p><p class="count" id="count"></p></div>
+      </div>
+      <div id="q3"></div>
+    </div>`);
+  const paintPins = (cur) => $$(".pin").forEach(b => { b.classList.toggle("seen", S.seen.includes(b.dataset.id)); b.classList.toggle("on", b.dataset.id === cur); });
+  const cnt = () => { const c = $("#count"); if (c) c.textContent = `Зерттелді: ${S.seen.length}/${PLACES.length}`; };
+  $$(".pin").forEach(b => b.onclick = () => {
+    const p = PLACES.find(x => x.id === b.dataset.id);
+    if (!S.seen.includes(p.id)) S.seen.push(p.id);
+    $("#place").innerHTML = `${p.yr ? `<span class="yr">${p.yr}</span>` : ""}<h3>${p.n}</h3><p>${p.t}</p><p class="count" id="count"></p>`;
+    cnt(); paintPins(p.id); if (all()) question();
+  });
+  function question() {
+    if ($("#q3").childElementCount) return;
+    $("#q3").innerHTML = `<div class="outcome"><h3 class="q">${CH3Q.q}</h3>
+      <div class="opts">${CH3Q.opts.map((o, i) => `<button class="opt" data-i="${i}"><span class="opt-k">${"АӘБ"[i]}</span><span>${o.t}</span></button>`).join("")}</div><div id="out3"></div></div>`;
+    const show = (i, fresh) => {
+      const ok = CH3Q.opts[i].ok;
+      $$("#q3 .opt").forEach(b => { b.disabled = true; const j = +b.dataset.i; if (j === i) b.classList.add(ok ? "right" : "wrong"); if (CH3Q.opts[j].ok) b.classList.add("right"); });
+      const fx = ok ? { force: +1 } : { force: -1 };
+      const hist = { peace: -1 };
+      $("#out3").innerHTML = `<div class="outcome"><p class="explain">${ok ? CH3Q.okText : CH3Q.noText} <span class="event">(${fxText(fx)})</span></p>
+        <div class="history"><h4>Тарихта</h4><p>Көтерілісшілер Сыр бойындағы бекіністерге баратын керуендерге шабуыл жасап, патша әкімшілігін көп жыл мазалады. Жауап ретінде жазалаушы отрядтар ауылдарды қуып, малын айдап әкетті.</p>
+        <p class="event"><b>Жазалаушы отрядтар:</b> ${fxText(hist)}</p></div>
+        <button class="btn" id="next">Келесі тарау</button></div>`;
+      if (fresh) { applyFx(fx); setTimeout(() => applyFx(hist), reduceMQ.matches ? 0 : 900); }
+      $("#next").onclick = () => go(5);
+    };
+    $$("#q3 .opt").forEach(b => b.onclick = () => { S.ch3 = +b.dataset.i; show(S.ch3, true); });
+    if (S.ch3 !== null) show(S.ch3, false);
+  }
+  cnt(); paintPins(null); if (all()) question();
+}
+
+function timelineSVG() {
+  const x = y => 40 + (y - 1847) / 12 * 520;
+  const ev = [
+    { y: 1847, t: "Райым бекінісі.", t2: "Көтеріліс басталды", up: true },
+    { y: 1853, t: "Ақмешіт алынды", up: false },
+    { y: 1857, t: "Жантөрин", t2: "өлтірілді", up: true },
+    { y: 1858.5, t: "Бітім", up: false },
+  ];
+  let ticks = "";
+  for (let y = 1847; y <= 1859; y++) ticks += `<path d="M${x(y)} 96V${y % 1 === 0 ? 104 : 100}" stroke="rgba(220,200,160,.4)"/>` + ([1847, 1850, 1853, 1857, 1858].includes(y) ? `<text x="${x(y)}" y="120" text-anchor="middle" fill="#ab9c80" font-family="PT Sans Narrow" font-size="13">${y}</text>` : "");
+  return `<svg viewBox="0 0 600 170" role="img" aria-label="Уақыт сызығы: 1847–1857 қарсы шығу, 1858 бейімделу">
+    <rect x="${x(1847)}" y="76" width="${x(1858) - x(1847)}" height="18" fill="#b23a2f"/>
+    <rect x="${x(1858)}" y="76" width="${x(1859) - x(1858)}" height="18" fill="#e8b23f"/>
+    <path d="M${x(1847)} 85H${x(1858)}" stroke="#f2e7cd" stroke-opacity=".5" stroke-dasharray="3 3"/>
+    <text x="${(x(1847) + x(1858)) / 2}" y="89.5" text-anchor="middle" fill="#f2e7cd" font-family="PT Sans Narrow" font-weight="700" font-size="13" letter-spacing="2">ҚАРСЫ ШЫҒУ</text>
+    ${ticks}
+    ${ev.map(e => e.up
+      ? `<path d="M${x(e.y)} 74V52" stroke="#dcc8a0" stroke-width="1"/><text x="${x(e.y) + 4}" y="38" fill="#f2e7cd" font-family="PT Sans Narrow" font-size="13">${e.t}</text>${e.t2 ? `<text x="${x(e.y) + 4}" y="53" fill="#f2e7cd" font-family="PT Sans Narrow" font-size="13">${e.t2}</text>` : ""}`
+      : `<path d="M${x(e.y)} 127V142" stroke="#dcc8a0" stroke-width="1"/><text x="${x(e.y) + 4}" y="158" fill="#f2e7cd" font-family="PT Sans Narrow" font-size="13">${e.t}</text>`).join("")}
+    <text x="${x(1858) + 2}" y="70" fill="#e8b23f" font-family="PT Sans Narrow" font-weight="700" font-size="12" letter-spacing="1">БЕЙІМДЕЛУ</text>
+  </svg>`;
+}
+
+function sFinal() {
+  const match = (S.picks.ch2 === CH2.hist) + (S.ch3 !== null && CH3Q.opts[S.ch3].ok) + (S.picks.ch4 === CH4.hist) + (S.picks.ch5 === CH5.hist);
+  const peaceNote = S.m.peace <= 4
+    ? `Сенің ауылыңның амандығы ${S.m.peace}/10 деңгейіне дейін түсті. Тарихта да дәл осылай болды: 1858 жылға қарай ел қатты шаршады.`
+    : `Сенің ауылыңның амандығы ${S.m.peace}/10. Есеттің ауылдары 1858 жылға қарай бұдан әлдеқайда ауыр жағдайда еді.`;
+  stage.innerHTML = panel(`
+    <p class="kicker"><span>Қорытынды</span></p><h2>Біз не түсіндік?</h2>
+    <div class="tl">${timelineSVG()}</div>
+    <div class="verdict">
+      <div class="r"><h3>1847–1857. Қарсы шығу</h3><p>Өзгерістер мүмкіндіктен гөрі кедергіні көп әкелді: жер тарылды, салық ауырлады, билік сырттан басқарылды. Сондықтан халық қолына қару алды. Он жыл бойы Есет жасағы патша бекіністері мен керуендеріне қысым көрсетті.</p></div>
+      <div class="a"><h3>1858. Бейімделу</h3><p>Күш таусылып, ел шаршағанда Есет басқа жолды таңдады. Ол бітімге келіп, кешірім алды және би болып, халқын жаңа жағдайда сақтауға тырысты.</p></div>
+    </div>
+    <p class="answer">Демек, біздің зерттеу идеямыз расталды: бір қоғам бір өзгеріске алдымен қарсы шығып, кейін бейімделе алады. Бұл екеуі бір-біріне қайшы емес. Екеуі де халықты сақтаудың жолы.</p>
+    <div class="path"><h3>Сенің жолың</h3>
+      <p>Төрт шешімнің ${match}-еуі Есеттің шешімімен сәйкес келді. ${peaceNote}</p>
+      <div class="meters">${METERS.map(mt => meterHTML(mt, S.m[mt.k])).join("")}</div>
+    </div>
+    <button class="btn" id="next">Білімімді тексеру</button>`);
+  $("#next").onclick = () => go(8);
+}
+
+function sQuiz() {
+  const i = S.qi, Q = QUIZ[i];
+  stage.innerHTML = panel(`
+    <p class="kicker"><span>Сынақ</span><span class="yr">${i + 1}/${QUIZ.length}</span></p>
+    <div class="qprog" aria-hidden="true">${QUIZ.map((_, j) => `<i class="${S.quiz[j] === undefined ? (j === i ? "cur" : "") : (S.quiz[j] === QUIZ[j].a ? "ok" : "no")}"></i>`).join("")}</div>
+    <h2>${Q.q}</h2>
+    <div class="opts">${Q.o.map((o, j) => `<button class="opt" data-i="${j}"><span class="opt-k">${"АӘБ"[j]}</span><span>${o}</span></button>`).join("")}</div>
+    <div id="qout"></div>`);
+  const show = (j) => {
+    $$(".opt").forEach(b => { b.disabled = true; const k = +b.dataset.i; if (k === Q.a) b.classList.add("right"); else if (k === j) b.classList.add("wrong"); });
+    const ok = j === Q.a;
+    $("#qout").innerHTML = `<div class="outcome"><p class="explain"><b>${ok ? "Дұрыс." : "Қате."}</b> ${Q.e}</p><button class="btn" id="next">${i + 1 < QUIZ.length ? "Келесі сұрақ" : "Нәтижені көру"}</button></div>`;
+    $(".qprog").innerHTML = QUIZ.map((_, k) => `<i class="${S.quiz[k] === undefined ? (k === i ? "cur" : "") : (S.quiz[k] === QUIZ[k].a ? "ok" : "no")}"></i>`).join("");
+    $("#next").onclick = () => { if (i + 1 < QUIZ.length) { S.qi++; go(8); } else go(9); };
+    $("#next").focus({ preventScroll: true });
+  };
+  $$(".opt").forEach(b => b.onclick = () => { S.quiz[i] = +b.dataset.i; show(S.quiz[i]); });
+  if (S.quiz[i] !== undefined) show(S.quiz[i]);
+}
+
+function sResult() {
+  const score = QUIZ.filter((q, i) => S.quiz[i] === q.a).length;
+  const rank = score === 5 ? "Есеттің сенімді серігі" : score >= 3 ? "Ер жүрек жігіт" : "Жолды қайта жүріп өт";
+  const line = score === 5 ? "Сен тақырыпты толық түсіндің: халық неге қарсы шыққанын да, неге бейімделгенін де біле аласың."
+    : score >= 3 ? "Жақсы нәтиже. Қате кеткен сұрақтарды қайта ойнап, тағы бір рет тексер."
+    : "Ештеңе етпейді. Есеттің жолы ұзақ болған. Қайта ойнап көр, бұл жолы оңайырақ болады.";
+  stage.innerHTML = panel(`
+    <div class="result">
+      <p class="kicker"><span>Нәтиже</span></p>
+      <p class="score">${score}<small>/5</small></p>
+      <h2 class="rank">${rank}</h2>
+      <p class="lead">${line}</p>
+      <div class="row"><button class="btn" id="again">Қайта ойнау</button><button class="btn ghost" id="home">Басты бетке</button></div>
+      <p class="authors">Жобаны жасағандар: <b>Маулен</b>, <b>Сагди</b>, <b>Ералы</b>. Қазақстан тарихы, 9 «В» сынып.</p>
+    </div>`);
+  $("#again").onclick = () => { S = fresh(); go(1); };
+  $("#home").onclick = () => { S = fresh(); go(0); };
+}
+
+const SCENES = [sIntro, sIdea, sSort, sChoice(CH2, "ch2", 4), sMap, sChoice(CH4, "ch4", 6), sChoice(CH5, "ch5", 7), sFinal, sQuiz, sResult];
+
+function start(data) {
+  if (data && typeof data.scene === "number" && data.m) S = Object.assign(fresh(), data);
+  renderHud(); SCENES[S.scene]();
+}
+if (hot && hot.ready) hot.ready(start); else start(hot && hot.data);
+})();
+</script>
